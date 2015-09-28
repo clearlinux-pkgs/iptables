@@ -4,7 +4,7 @@
 #
 Name     : iptables
 Version  : 1.4.21
-Release  : 9
+Release  : 10
 URL      : http://ftp.netfilter.org/pub/iptables/iptables-1.4.21.tar.bz2
 Source0  : http://ftp.netfilter.org/pub/iptables/iptables-1.4.21.tar.bz2
 Summary  : Interface to the (old) ip_queue mechanism

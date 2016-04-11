@@ -1,0 +1,12 @@
+[Unit]
+Description=Save IPv6 firewall settings across reboots
+DefaultDependencies=no
+Before=shutdown.target reboot.target halt.target kexec.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=true
+ExecStart=/usr/bin/ip6tables-save > /etc/ip6tables.rules
+
+[Install]
+WantedBy=shutdown.target

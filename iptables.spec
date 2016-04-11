@@ -4,13 +4,18 @@
 #
 Name     : iptables
 Version  : 1.4.21
-Release  : 10
+Release  : 11
 URL      : http://ftp.netfilter.org/pub/iptables/iptables-1.4.21.tar.bz2
 Source0  : http://ftp.netfilter.org/pub/iptables/iptables-1.4.21.tar.bz2
+Source1  : ip6tables-restore.service
+Source2  : ip6tables-save.service
+Source3  : iptables-restore.service
+Source4  : iptables-save.service
 Summary  : Interface to the (old) ip_queue mechanism
 Group    : Development/Tools
 License  : GPL-2.0
 Requires: iptables-bin
+Requires: iptables-config
 Requires: iptables-lib
 Requires: iptables-doc
 Requires: iptables-data
@@ -26,9 +31,18 @@ No detailed description available
 Summary: bin components for the iptables package.
 Group: Binaries
 Requires: iptables-data
+Requires: iptables-config
 
 %description bin
 bin components for the iptables package.
+
+
+%package config
+Summary: config components for the iptables package.
+Group: Default
+
+%description config
+config components for the iptables package.
 
 
 %package data
@@ -45,6 +59,7 @@ Group: Development
 Requires: iptables-lib
 Requires: iptables-bin
 Requires: iptables-data
+Provides: iptables-devel
 
 %description dev
 dev components for the iptables package.
@@ -62,12 +77,14 @@ doc components for the iptables package.
 Summary: lib components for the iptables package.
 Group: Libraries
 Requires: iptables-data
+Requires: iptables-config
 
 %description lib
 lib components for the iptables package.
 
 
 %prep
+cd ..
 %setup -q -n iptables-1.4.21
 %patch1 -p1
 %patch2 -p1
@@ -79,15 +96,63 @@ make V=1  %{?_smp_mflags}
 %check
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
-export no_proxy=intel.com,localhost
-make VERBOSE=1 V=1 %{?_smp_mflags} check || :
+export no_proxy=localhost
+make VERBOSE=1 V=1 %{?_smp_mflags} check
 
 %install
 rm -rf %{buildroot}
 %make_install
+mkdir -p %{buildroot}/usr/lib/systemd/system
+install -m 0644 %{SOURCE1} %{buildroot}/usr/lib/systemd/system/ip6tables-restore.service
+install -m 0644 %{SOURCE2} %{buildroot}/usr/lib/systemd/system/ip6tables-save.service
+install -m 0644 %{SOURCE3} %{buildroot}/usr/lib/systemd/system/iptables-restore.service
+install -m 0644 %{SOURCE4} %{buildroot}/usr/lib/systemd/system/iptables-save.service
 
 %files
 %defattr(-,root,root,-)
+
+%files bin
+%defattr(-,root,root,-)
+/usr/bin/ip6tables
+/usr/bin/ip6tables-restore
+/usr/bin/ip6tables-save
+/usr/bin/iptables
+/usr/bin/iptables-restore
+/usr/bin/iptables-save
+/usr/bin/iptables-xml
+/usr/bin/nfnl_osf
+/usr/bin/xtables-multi
+
+%files config
+%defattr(-,root,root,-)
+/usr/lib/systemd/system/ip6tables-restore.service
+/usr/lib/systemd/system/ip6tables-save.service
+/usr/lib/systemd/system/iptables-restore.service
+/usr/lib/systemd/system/iptables-save.service
+
+%files data
+%defattr(-,root,root,-)
+/usr/share/xtables/pf.os
+
+%files dev
+%defattr(-,root,root,-)
+/usr/include/*.h
+/usr/include/libiptc/ipt_kernel_headers.h
+/usr/include/libiptc/libip6tc.h
+/usr/include/libiptc/libiptc.h
+/usr/include/libiptc/libxtc.h
+/usr/include/libiptc/xtcshared.h
+/usr/lib64/*.so
+/usr/lib64/pkgconfig/*.pc
+
+%files doc
+%defattr(-,root,root,-)
+%doc /usr/share/man/man1/*
+%doc /usr/share/man/man8/*
+
+%files lib
+%defattr(-,root,root,-)
+/usr/lib64/*.so.*
 /usr/lib64/xtables/libip6t_DNAT.so
 /usr/lib64/xtables/libip6t_DNPT.so
 /usr/lib64/xtables/libip6t_HL.so
@@ -197,39 +262,3 @@ rm -rf %{buildroot}
 /usr/lib64/xtables/libxt_tos.so
 /usr/lib64/xtables/libxt_u32.so
 /usr/lib64/xtables/libxt_udp.so
-
-%files bin
-%defattr(-,root,root,-)
-/usr/bin/ip6tables
-/usr/bin/ip6tables-restore
-/usr/bin/ip6tables-save
-/usr/bin/iptables
-/usr/bin/iptables-restore
-/usr/bin/iptables-save
-/usr/bin/iptables-xml
-/usr/bin/nfnl_osf
-/usr/bin/xtables-multi
-
-%files data
-%defattr(-,root,root,-)
-/usr/share/xtables/pf.os
-
-%files dev
-%defattr(-,root,root,-)
-/usr/include/*.h
-/usr/include/libiptc/ipt_kernel_headers.h
-/usr/include/libiptc/libip6tc.h
-/usr/include/libiptc/libiptc.h
-/usr/include/libiptc/libxtc.h
-/usr/include/libiptc/xtcshared.h
-/usr/lib64/*.so
-/usr/lib64/pkgconfig/*.pc
-
-%files doc
-%defattr(-,root,root,-)
-%doc /usr/share/man/man1/*
-%doc /usr/share/man/man8/*
-
-%files lib
-%defattr(-,root,root,-)
-/usr/lib64/*.so.*

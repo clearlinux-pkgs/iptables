@@ -1,0 +1,12 @@
+[Unit]
+Description=Save IPv4 firewall settings across reboots
+DefaultDependencies=no
+Before=shutdown.target reboot.target halt.target kexec.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=true
+ExecStart=/usr/bin/iptables-save > /etc/iptables.rules
+
+[Install]
+WantedBy=shutdown.target

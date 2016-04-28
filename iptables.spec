@@ -4,7 +4,7 @@
 #
 Name     : iptables
 Version  : 1.4.21
-Release  : 11
+Release  : 12
 URL      : http://ftp.netfilter.org/pub/iptables/iptables-1.4.21.tar.bz2
 Source0  : http://ftp.netfilter.org/pub/iptables/iptables-1.4.21.tar.bz2
 Source1  : ip6tables-restore.service
@@ -73,6 +73,14 @@ Group: Documentation
 doc components for the iptables package.
 
 
+%package extras
+Summary: extras components for the iptables package.
+Group: Default
+
+%description extras
+extras components for the iptables package.
+
+
 %package lib
 Summary: lib components for the iptables package.
 Group: Libraries
@@ -84,12 +92,15 @@ lib components for the iptables package.
 
 
 %prep
-cd ..
 %setup -q -n iptables-1.4.21
 %patch1 -p1
 %patch2 -p1
 
 %build
+export CFLAGS="$CFLAGS -Os -ffunction-sections "
+export FCFLAGS="$CFLAGS -Os -ffunction-sections "
+export FFLAGS="$CFLAGS -Os -ffunction-sections "
+export CXXFLAGS="$CXXFLAGS -Os -ffunction-sections "
 %configure --disable-static --enable-devel --enable-ipv6
 make V=1  %{?_smp_mflags}
 
@@ -150,8 +161,15 @@ install -m 0644 %{SOURCE4} %{buildroot}/usr/lib/systemd/system/iptables-save.ser
 %doc /usr/share/man/man1/*
 %doc /usr/share/man/man8/*
 
+%files extras
+%defattr(-,root,root,-)
+/usr/lib64/libip4tc.so.0
+/usr/lib64/libip4tc.so.0.1.0
+
 %files lib
 %defattr(-,root,root,-)
+%exclude /usr/lib64/libip4tc.so.0
+%exclude /usr/lib64/libip4tc.so.0.1.0
 /usr/lib64/*.so.*
 /usr/lib64/xtables/libip6t_DNAT.so
 /usr/lib64/xtables/libip6t_DNPT.so

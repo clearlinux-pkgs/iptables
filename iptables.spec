@@ -4,7 +4,7 @@
 #
 Name     : iptables
 Version  : 1.4.21
-Release  : 12
+Release  : 13
 URL      : http://ftp.netfilter.org/pub/iptables/iptables-1.4.21.tar.bz2
 Source0  : http://ftp.netfilter.org/pub/iptables/iptables-1.4.21.tar.bz2
 Source1  : ip6tables-restore.service

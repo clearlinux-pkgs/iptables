@@ -6,7 +6,7 @@ Before=shutdown.target reboot.target halt.target kexec.target
 [Service]
 Type=oneshot
 RemainAfterExit=true
-ExecStart=/usr/bin/iptables-save > /etc/iptables.rules
+ExecStart=/bin/sh -c '/usr/bin/iptables-save > /etc/iptables.rules'
 
 [Install]
 WantedBy=shutdown.target

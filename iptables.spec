@@ -4,7 +4,7 @@
 #
 Name     : iptables
 Version  : 1.6.0
-Release  : 16
+Release  : 17
 URL      : http://ftp.netfilter.org/pub/iptables/iptables-1.6.0.tar.bz2
 Source0  : http://ftp.netfilter.org/pub/iptables/iptables-1.6.0.tar.bz2
 Source1  : ip6tables-restore.service
@@ -21,6 +21,15 @@ Requires: iptables-doc
 Requires: iptables-data
 BuildRequires : bison
 BuildRequires : flex
+BuildRequires : gcc-dev32
+BuildRequires : gcc-libgcc32
+BuildRequires : gcc-libstdc++32
+BuildRequires : glibc-dev32
+BuildRequires : glibc-libc32
+BuildRequires : pkgconfig(32libmnl)
+BuildRequires : pkgconfig(32libnetfilter_conntrack)
+BuildRequires : pkgconfig(32libnfnetlink)
+BuildRequires : pkgconfig(32libnftnl)
 BuildRequires : pkgconfig(libmnl)
 BuildRequires : pkgconfig(libnetfilter_conntrack)
 BuildRequires : pkgconfig(libnfnetlink)
@@ -68,6 +77,17 @@ Provides: iptables-devel
 dev components for the iptables package.
 
 
+%package dev32
+Summary: dev32 components for the iptables package.
+Group: Default
+Requires: iptables-lib32
+Requires: iptables-bin
+Requires: iptables-data
+
+%description dev32
+dev32 components for the iptables package.
+
+
 %package doc
 Summary: doc components for the iptables package.
 Group: Documentation
@@ -94,9 +114,22 @@ Requires: iptables-config
 lib components for the iptables package.
 
 
+%package lib32
+Summary: lib32 components for the iptables package.
+Group: Default
+Requires: iptables-data
+Requires: iptables-config
+
+%description lib32
+lib32 components for the iptables package.
+
+
 %prep
 %setup -q -n iptables-1.6.0
 %patch1 -p1
+pushd ..
+cp -a iptables-1.6.0 build32
+popd
 
 %build
 export LANG=C
@@ -107,8 +140,24 @@ export CXXFLAGS="$CXXFLAGS -Os -ffunction-sections "
 %configure --disable-static --enable-devel --enable-ipv6
 make V=1
 
+pushd ../build32/
+export CFLAGS="$CFLAGS -m32"
+export CXXFLAGS="$CXXFLAGS -m32"
+export LDFLAGS="$LDFLAGS -m32"
+%configure --disable-static --enable-devel --enable-ipv6  --libdir=/usr/lib32 --build=i686-generic-linux-gnu --host=i686-generic-linux-gnu --target=i686-clr-linux-gnu
+make V=1
+popd
 %install
 rm -rf %{buildroot}
+pushd ../build32/
+%make_install32
+if [ -d  %{buildroot}/usr/lib32/pkgconfig ]
+then
+pushd %{buildroot}/usr/lib32/pkgconfig
+for i in *.pc ; do mv $i 32$i ; done
+popd
+fi
+popd
 %make_install
 mkdir -p %{buildroot}/usr/lib/systemd/system
 install -m 0644 %{SOURCE1} %{buildroot}/usr/lib/systemd/system/ip6tables-restore.service
@@ -118,6 +167,123 @@ install -m 0644 %{SOURCE4} %{buildroot}/usr/lib/systemd/system/iptables-save.ser
 
 %files
 %defattr(-,root,root,-)
+%exclude /usr/lib32/xtables/libarpt_mangle.so
+%exclude /usr/lib32/xtables/libebt_802_3.so
+%exclude /usr/lib32/xtables/libebt_ip.so
+%exclude /usr/lib32/xtables/libebt_limit.so
+%exclude /usr/lib32/xtables/libebt_log.so
+%exclude /usr/lib32/xtables/libebt_mark.so
+%exclude /usr/lib32/xtables/libebt_mark_m.so
+%exclude /usr/lib32/xtables/libebt_nflog.so
+%exclude /usr/lib32/xtables/libip6t_DNAT.so
+%exclude /usr/lib32/xtables/libip6t_DNPT.so
+%exclude /usr/lib32/xtables/libip6t_HL.so
+%exclude /usr/lib32/xtables/libip6t_LOG.so
+%exclude /usr/lib32/xtables/libip6t_MASQUERADE.so
+%exclude /usr/lib32/xtables/libip6t_NETMAP.so
+%exclude /usr/lib32/xtables/libip6t_REDIRECT.so
+%exclude /usr/lib32/xtables/libip6t_REJECT.so
+%exclude /usr/lib32/xtables/libip6t_SNAT.so
+%exclude /usr/lib32/xtables/libip6t_SNPT.so
+%exclude /usr/lib32/xtables/libip6t_ah.so
+%exclude /usr/lib32/xtables/libip6t_dst.so
+%exclude /usr/lib32/xtables/libip6t_eui64.so
+%exclude /usr/lib32/xtables/libip6t_frag.so
+%exclude /usr/lib32/xtables/libip6t_hbh.so
+%exclude /usr/lib32/xtables/libip6t_hl.so
+%exclude /usr/lib32/xtables/libip6t_icmp6.so
+%exclude /usr/lib32/xtables/libip6t_ipv6header.so
+%exclude /usr/lib32/xtables/libip6t_mh.so
+%exclude /usr/lib32/xtables/libip6t_rt.so
+%exclude /usr/lib32/xtables/libipt_CLUSTERIP.so
+%exclude /usr/lib32/xtables/libipt_DNAT.so
+%exclude /usr/lib32/xtables/libipt_ECN.so
+%exclude /usr/lib32/xtables/libipt_LOG.so
+%exclude /usr/lib32/xtables/libipt_MASQUERADE.so
+%exclude /usr/lib32/xtables/libipt_NETMAP.so
+%exclude /usr/lib32/xtables/libipt_REDIRECT.so
+%exclude /usr/lib32/xtables/libipt_REJECT.so
+%exclude /usr/lib32/xtables/libipt_SNAT.so
+%exclude /usr/lib32/xtables/libipt_TTL.so
+%exclude /usr/lib32/xtables/libipt_ULOG.so
+%exclude /usr/lib32/xtables/libipt_ah.so
+%exclude /usr/lib32/xtables/libipt_icmp.so
+%exclude /usr/lib32/xtables/libipt_realm.so
+%exclude /usr/lib32/xtables/libipt_ttl.so
+%exclude /usr/lib32/xtables/libxt_AUDIT.so
+%exclude /usr/lib32/xtables/libxt_CHECKSUM.so
+%exclude /usr/lib32/xtables/libxt_CLASSIFY.so
+%exclude /usr/lib32/xtables/libxt_CONNMARK.so
+%exclude /usr/lib32/xtables/libxt_CONNSECMARK.so
+%exclude /usr/lib32/xtables/libxt_CT.so
+%exclude /usr/lib32/xtables/libxt_DSCP.so
+%exclude /usr/lib32/xtables/libxt_HMARK.so
+%exclude /usr/lib32/xtables/libxt_IDLETIMER.so
+%exclude /usr/lib32/xtables/libxt_LED.so
+%exclude /usr/lib32/xtables/libxt_MARK.so
+%exclude /usr/lib32/xtables/libxt_NFLOG.so
+%exclude /usr/lib32/xtables/libxt_NFQUEUE.so
+%exclude /usr/lib32/xtables/libxt_NOTRACK.so
+%exclude /usr/lib32/xtables/libxt_RATEEST.so
+%exclude /usr/lib32/xtables/libxt_SECMARK.so
+%exclude /usr/lib32/xtables/libxt_SET.so
+%exclude /usr/lib32/xtables/libxt_SYNPROXY.so
+%exclude /usr/lib32/xtables/libxt_TCPMSS.so
+%exclude /usr/lib32/xtables/libxt_TCPOPTSTRIP.so
+%exclude /usr/lib32/xtables/libxt_TEE.so
+%exclude /usr/lib32/xtables/libxt_TOS.so
+%exclude /usr/lib32/xtables/libxt_TPROXY.so
+%exclude /usr/lib32/xtables/libxt_TRACE.so
+%exclude /usr/lib32/xtables/libxt_addrtype.so
+%exclude /usr/lib32/xtables/libxt_bpf.so
+%exclude /usr/lib32/xtables/libxt_cgroup.so
+%exclude /usr/lib32/xtables/libxt_cluster.so
+%exclude /usr/lib32/xtables/libxt_comment.so
+%exclude /usr/lib32/xtables/libxt_connbytes.so
+%exclude /usr/lib32/xtables/libxt_connlabel.so
+%exclude /usr/lib32/xtables/libxt_connlimit.so
+%exclude /usr/lib32/xtables/libxt_connmark.so
+%exclude /usr/lib32/xtables/libxt_conntrack.so
+%exclude /usr/lib32/xtables/libxt_cpu.so
+%exclude /usr/lib32/xtables/libxt_dccp.so
+%exclude /usr/lib32/xtables/libxt_devgroup.so
+%exclude /usr/lib32/xtables/libxt_dscp.so
+%exclude /usr/lib32/xtables/libxt_ecn.so
+%exclude /usr/lib32/xtables/libxt_esp.so
+%exclude /usr/lib32/xtables/libxt_hashlimit.so
+%exclude /usr/lib32/xtables/libxt_helper.so
+%exclude /usr/lib32/xtables/libxt_ipcomp.so
+%exclude /usr/lib32/xtables/libxt_iprange.so
+%exclude /usr/lib32/xtables/libxt_ipvs.so
+%exclude /usr/lib32/xtables/libxt_length.so
+%exclude /usr/lib32/xtables/libxt_limit.so
+%exclude /usr/lib32/xtables/libxt_mac.so
+%exclude /usr/lib32/xtables/libxt_mangle.so
+%exclude /usr/lib32/xtables/libxt_mark.so
+%exclude /usr/lib32/xtables/libxt_multiport.so
+%exclude /usr/lib32/xtables/libxt_nfacct.so
+%exclude /usr/lib32/xtables/libxt_osf.so
+%exclude /usr/lib32/xtables/libxt_owner.so
+%exclude /usr/lib32/xtables/libxt_physdev.so
+%exclude /usr/lib32/xtables/libxt_pkttype.so
+%exclude /usr/lib32/xtables/libxt_policy.so
+%exclude /usr/lib32/xtables/libxt_quota.so
+%exclude /usr/lib32/xtables/libxt_rateest.so
+%exclude /usr/lib32/xtables/libxt_recent.so
+%exclude /usr/lib32/xtables/libxt_rpfilter.so
+%exclude /usr/lib32/xtables/libxt_sctp.so
+%exclude /usr/lib32/xtables/libxt_set.so
+%exclude /usr/lib32/xtables/libxt_socket.so
+%exclude /usr/lib32/xtables/libxt_standard.so
+%exclude /usr/lib32/xtables/libxt_state.so
+%exclude /usr/lib32/xtables/libxt_statistic.so
+%exclude /usr/lib32/xtables/libxt_string.so
+%exclude /usr/lib32/xtables/libxt_tcp.so
+%exclude /usr/lib32/xtables/libxt_tcpmss.so
+%exclude /usr/lib32/xtables/libxt_time.so
+%exclude /usr/lib32/xtables/libxt_tos.so
+%exclude /usr/lib32/xtables/libxt_u32.so
+%exclude /usr/lib32/xtables/libxt_udp.so
 
 %files bin
 %defattr(-,root,root,-)
@@ -159,8 +325,25 @@ install -m 0644 %{SOURCE4} %{buildroot}/usr/lib/systemd/system/iptables-save.ser
 /usr/include/libiptc/libiptc.h
 /usr/include/libiptc/libxtc.h
 /usr/include/libiptc/xtcshared.h
-/usr/lib64/*.so
-/usr/lib64/pkgconfig/*.pc
+/usr/lib64/libip4tc.so
+/usr/lib64/libip6tc.so
+/usr/lib64/libiptc.so
+/usr/lib64/libxtables.so
+/usr/lib64/pkgconfig/libip4tc.pc
+/usr/lib64/pkgconfig/libip6tc.pc
+/usr/lib64/pkgconfig/libiptc.pc
+/usr/lib64/pkgconfig/xtables.pc
+
+%files dev32
+%defattr(-,root,root,-)
+/usr/lib32/libip4tc.so
+/usr/lib32/libip6tc.so
+/usr/lib32/libiptc.so
+/usr/lib32/libxtables.so
+/usr/lib32/pkgconfig/32libip4tc.pc
+/usr/lib32/pkgconfig/32libip6tc.pc
+/usr/lib32/pkgconfig/32libiptc.pc
+/usr/lib32/pkgconfig/32xtables.pc
 
 %files doc
 %defattr(-,root,root,-)
@@ -176,7 +359,12 @@ install -m 0644 %{SOURCE4} %{buildroot}/usr/lib/systemd/system/iptables-save.ser
 %defattr(-,root,root,-)
 %exclude /usr/lib64/libip4tc.so.0
 %exclude /usr/lib64/libip4tc.so.0.1.0
-/usr/lib64/*.so.*
+/usr/lib64/libip6tc.so.0
+/usr/lib64/libip6tc.so.0.1.0
+/usr/lib64/libiptc.so.0
+/usr/lib64/libiptc.so.0.0.0
+/usr/lib64/libxtables.so.11
+/usr/lib64/libxtables.so.11.0.0
 /usr/lib64/xtables/libarpt_mangle.so
 /usr/lib64/xtables/libebt_802_3.so
 /usr/lib64/xtables/libebt_ip.so
@@ -294,3 +482,14 @@ install -m 0644 %{SOURCE4} %{buildroot}/usr/lib/systemd/system/iptables-save.ser
 /usr/lib64/xtables/libxt_tos.so
 /usr/lib64/xtables/libxt_u32.so
 /usr/lib64/xtables/libxt_udp.so
+
+%files lib32
+%defattr(-,root,root,-)
+/usr/lib32/libip4tc.so.0
+/usr/lib32/libip4tc.so.0.1.0
+/usr/lib32/libip6tc.so.0
+/usr/lib32/libip6tc.so.0.1.0
+/usr/lib32/libiptc.so.0
+/usr/lib32/libiptc.so.0.0.0
+/usr/lib32/libxtables.so.11
+/usr/lib32/libxtables.so.11.0.0

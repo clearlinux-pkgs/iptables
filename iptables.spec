@@ -6,14 +6,14 @@
 #
 Name     : iptables
 Version  : 1.6.1
-Release  : 18
-URL      : http://ftp.netfilter.org/pub/iptables/iptables-1.6.1.tar.bz2
-Source0  : http://ftp.netfilter.org/pub/iptables/iptables-1.6.1.tar.bz2
+Release  : 19
+URL      : https://www.netfilter.org/projects/iptables/files/iptables-1.6.1.tar.bz2
+Source0  : https://www.netfilter.org/projects/iptables/files/iptables-1.6.1.tar.bz2
 Source1  : ip6tables-restore.service
 Source2  : ip6tables-save.service
 Source3  : iptables-restore.service
 Source4  : iptables-save.service
-Source99 : http://ftp.netfilter.org/pub/iptables/iptables-1.6.1.tar.bz2.sig
+Source99 : https://www.netfilter.org/projects/iptables/files/iptables-1.6.1.tar.bz2.sig
 Summary  : Shared Xtables code for extensions and iproute2
 Group    : Development/Tools
 License  : GPL-2.0
@@ -137,7 +137,7 @@ popd
 
 %build
 export LANG=C
-export SOURCE_DATE_EPOCH=1490205237
+export SOURCE_DATE_EPOCH=1492122216
 export CFLAGS="$CFLAGS -Os -ffunction-sections "
 export FCFLAGS="$CFLAGS -Os -ffunction-sections "
 export FFLAGS="$CFLAGS -Os -ffunction-sections "
@@ -154,7 +154,7 @@ export LDFLAGS="$LDFLAGS -m32"
 make V=1
 popd
 %install
-export SOURCE_DATE_EPOCH=1490205237
+export SOURCE_DATE_EPOCH=1492122216
 rm -rf %{buildroot}
 pushd ../build32/
 %make_install32

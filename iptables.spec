@@ -6,7 +6,7 @@
 #
 Name     : iptables
 Version  : 1.6.1
-Release  : 20
+Release  : 21
 URL      : https://www.netfilter.org/projects/iptables/files/iptables-1.6.1.tar.bz2
 Source0  : https://www.netfilter.org/projects/iptables/files/iptables-1.6.1.tar.bz2
 Source1  : ip6tables-restore.service
@@ -112,7 +112,6 @@ extras components for the iptables package.
 Summary: lib components for the iptables package.
 Group: Libraries
 Requires: iptables-data
-Requires: iptables-config
 
 %description lib
 lib components for the iptables package.
@@ -122,7 +121,6 @@ lib components for the iptables package.
 Summary: lib32 components for the iptables package.
 Group: Default
 Requires: iptables-data
-Requires: iptables-config
 
 %description lib32
 lib32 components for the iptables package.
@@ -136,12 +134,15 @@ cp -a iptables-1.6.1 build32
 popd
 
 %build
+export http_proxy=http://127.0.0.1:9/
+export https_proxy=http://127.0.0.1:9/
+export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1492122216
-export CFLAGS="$CFLAGS -Os -ffunction-sections "
-export FCFLAGS="$CFLAGS -Os -ffunction-sections "
-export FFLAGS="$CFLAGS -Os -ffunction-sections "
-export CXXFLAGS="$CXXFLAGS -Os -ffunction-sections "
+export SOURCE_DATE_EPOCH=1507570410
+export CFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-semantic-interposition -fstack-protector-strong "
+export FCFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-semantic-interposition -fstack-protector-strong "
+export FFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-semantic-interposition -fstack-protector-strong "
+export CXXFLAGS="$CXXFLAGS -Os -fdata-sections -ffunction-sections -fno-semantic-interposition -fstack-protector-strong "
 %configure --disable-static --enable-devel --enable-ipv6
 make V=1
 
@@ -154,7 +155,7 @@ export LDFLAGS="$LDFLAGS -m32"
 make V=1
 popd
 %install
-export SOURCE_DATE_EPOCH=1492122216
+export SOURCE_DATE_EPOCH=1507570410
 rm -rf %{buildroot}
 pushd ../build32/
 %make_install32

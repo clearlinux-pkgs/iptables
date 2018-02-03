@@ -4,4 +4,4 @@ libm.so.6
 libmnl.so.0
 libnetfilter_conntrack.so.3
 libnfnetlink.so.0
-libnftnl.so.4
+libnftnl.so.7

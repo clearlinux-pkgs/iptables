@@ -5,15 +5,15 @@
 # Source0 file verified with key 0xAB4655A126D292E4 (coreteam@netfilter.org)
 #
 Name     : iptables
-Version  : 1.6.1
-Release  : 23
-URL      : https://www.netfilter.org/projects/iptables/files/iptables-1.6.1.tar.bz2
-Source0  : https://www.netfilter.org/projects/iptables/files/iptables-1.6.1.tar.bz2
+Version  : 1.6.2
+Release  : 24
+URL      : https://www.netfilter.org/projects/iptables/files/iptables-1.6.2.tar.bz2
+Source0  : https://www.netfilter.org/projects/iptables/files/iptables-1.6.2.tar.bz2
 Source1  : ip6tables-restore.service
 Source2  : ip6tables-save.service
 Source3  : iptables-restore.service
 Source4  : iptables-save.service
-Source99 : https://www.netfilter.org/projects/iptables/files/iptables-1.6.1.tar.bz2.sig
+Source99 : https://www.netfilter.org/projects/iptables/files/iptables-1.6.2.tar.bz2.sig
 Summary  : Shared Xtables code for extensions and iproute2
 Group    : Development/Tools
 License  : GPL-2.0
@@ -127,10 +127,10 @@ lib32 components for the iptables package.
 
 
 %prep
-%setup -q -n iptables-1.6.1
+%setup -q -n iptables-1.6.2
 %patch1 -p1
 pushd ..
-cp -a iptables-1.6.1 build32
+cp -a iptables-1.6.2 build32
 popd
 
 %build
@@ -138,13 +138,13 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1507570410
+export SOURCE_DATE_EPOCH=1517677432
 export CFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-semantic-interposition -fstack-protector-strong "
 export FCFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-semantic-interposition -fstack-protector-strong "
 export FFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-semantic-interposition -fstack-protector-strong "
 export CXXFLAGS="$CXXFLAGS -Os -fdata-sections -ffunction-sections -fno-semantic-interposition -fstack-protector-strong "
 %configure --disable-static --enable-devel --enable-ipv6
-make V=1
+make
 
 pushd ../build32/
 export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
@@ -152,10 +152,10 @@ export CFLAGS="$CFLAGS -m32"
 export CXXFLAGS="$CXXFLAGS -m32"
 export LDFLAGS="$LDFLAGS -m32"
 %configure --disable-static --enable-devel --enable-ipv6   --libdir=/usr/lib32 --build=i686-generic-linux-gnu --host=i686-generic-linux-gnu --target=i686-clr-linux-gnu
-make V=1
+make
 popd
 %install
-export SOURCE_DATE_EPOCH=1507570410
+export SOURCE_DATE_EPOCH=1517677432
 rm -rf %{buildroot}
 pushd ../build32/
 %make_install32
@@ -292,6 +292,7 @@ install -m 0644 %{SOURCE4} %{buildroot}/usr/lib/systemd/system/iptables-save.ser
 /usr/lib64/xtables/libip6t_ipv6header.so
 /usr/lib64/xtables/libip6t_mh.so
 /usr/lib64/xtables/libip6t_rt.so
+/usr/lib64/xtables/libip6t_srh.so
 /usr/lib64/xtables/libipt_CLUSTERIP.so
 /usr/lib64/xtables/libipt_DNAT.so
 /usr/lib64/xtables/libipt_ECN.so
@@ -509,3 +510,4 @@ install -m 0644 %{SOURCE4} %{buildroot}/usr/lib/systemd/system/iptables-save.ser
 /usr/lib32/libiptc.so.0.0.0
 /usr/lib32/libxtables.so.12
 /usr/lib32/libxtables.so.12.0.0
+/usr/lib32/xtables/libip6t_srh.so

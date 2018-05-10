@@ -6,7 +6,7 @@
 #
 Name     : iptables
 Version  : 1.6.2
-Release  : 24
+Release  : 25
 URL      : https://www.netfilter.org/projects/iptables/files/iptables-1.6.2.tar.bz2
 Source0  : https://www.netfilter.org/projects/iptables/files/iptables-1.6.2.tar.bz2
 Source1  : ip6tables-restore.service

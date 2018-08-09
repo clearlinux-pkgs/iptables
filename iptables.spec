@@ -5,22 +5,23 @@
 # Source0 file verified with key 0xAB4655A126D292E4 (coreteam@netfilter.org)
 #
 Name     : iptables
-Version  : 1.6.2
-Release  : 25
-URL      : https://www.netfilter.org/projects/iptables/files/iptables-1.6.2.tar.bz2
-Source0  : https://www.netfilter.org/projects/iptables/files/iptables-1.6.2.tar.bz2
+Version  : 1.8.0
+Release  : 26
+URL      : https://www.netfilter.org/projects/iptables/files/iptables-1.8.0.tar.bz2
+Source0  : https://www.netfilter.org/projects/iptables/files/iptables-1.8.0.tar.bz2
 Source1  : ip6tables-restore.service
 Source2  : ip6tables-save.service
 Source3  : iptables-restore.service
 Source4  : iptables-save.service
-Source99 : https://www.netfilter.org/projects/iptables/files/iptables-1.6.2.tar.bz2.sig
+Source99 : https://www.netfilter.org/projects/iptables/files/iptables-1.8.0.tar.bz2.sig
 Summary  : Shared Xtables code for extensions and iproute2
 Group    : Development/Tools
 License  : GPL-2.0
 Requires: iptables-bin
 Requires: iptables-config
 Requires: iptables-lib
-Requires: iptables-doc
+Requires: iptables-license
+Requires: iptables-man
 Requires: iptables-data
 BuildRequires : bison
 BuildRequires : flex
@@ -29,6 +30,7 @@ BuildRequires : gcc-libgcc32
 BuildRequires : gcc-libstdc++32
 BuildRequires : glibc-dev32
 BuildRequires : glibc-libc32
+BuildRequires : pkg-config
 BuildRequires : pkgconfig(32libmnl)
 BuildRequires : pkgconfig(32libnetfilter_conntrack)
 BuildRequires : pkgconfig(32libnfnetlink)
@@ -47,6 +49,8 @@ Summary: bin components for the iptables package.
 Group: Binaries
 Requires: iptables-data
 Requires: iptables-config
+Requires: iptables-license
+Requires: iptables-man
 
 %description bin
 bin components for the iptables package.
@@ -92,14 +96,6 @@ Requires: iptables-dev
 dev32 components for the iptables package.
 
 
-%package doc
-Summary: doc components for the iptables package.
-Group: Documentation
-
-%description doc
-doc components for the iptables package.
-
-
 %package extras
 Summary: extras components for the iptables package.
 Group: Default
@@ -112,6 +108,7 @@ extras components for the iptables package.
 Summary: lib components for the iptables package.
 Group: Libraries
 Requires: iptables-data
+Requires: iptables-license
 
 %description lib
 lib components for the iptables package.
@@ -121,16 +118,33 @@ lib components for the iptables package.
 Summary: lib32 components for the iptables package.
 Group: Default
 Requires: iptables-data
+Requires: iptables-license
 
 %description lib32
 lib32 components for the iptables package.
 
 
+%package license
+Summary: license components for the iptables package.
+Group: Default
+
+%description license
+license components for the iptables package.
+
+
+%package man
+Summary: man components for the iptables package.
+Group: Default
+
+%description man
+man components for the iptables package.
+
+
 %prep
-%setup -q -n iptables-1.6.2
+%setup -q -n iptables-1.8.0
 %patch1 -p1
 pushd ..
-cp -a iptables-1.6.2 build32
+cp -a iptables-1.8.0 build32
 popd
 
 %build
@@ -138,11 +152,11 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1517677432
-export CFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-semantic-interposition -fstack-protector-strong "
-export FCFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-semantic-interposition -fstack-protector-strong "
-export FFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-semantic-interposition -fstack-protector-strong "
-export CXXFLAGS="$CXXFLAGS -Os -fdata-sections -ffunction-sections -fno-semantic-interposition -fstack-protector-strong "
+export SOURCE_DATE_EPOCH=1533850297
+export CFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-semantic-interposition -fstack-protector-strong -mzero-caller-saved-regs=used "
+export FCFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-semantic-interposition -fstack-protector-strong -mzero-caller-saved-regs=used "
+export FFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-semantic-interposition -fstack-protector-strong -mzero-caller-saved-regs=used "
+export CXXFLAGS="$CXXFLAGS -Os -fdata-sections -ffunction-sections -fno-semantic-interposition -fstack-protector-strong -mzero-caller-saved-regs=used "
 %configure --disable-static --enable-devel --enable-ipv6
 make
 
@@ -155,8 +169,10 @@ export LDFLAGS="$LDFLAGS -m32"
 make
 popd
 %install
-export SOURCE_DATE_EPOCH=1517677432
+export SOURCE_DATE_EPOCH=1533850297
 rm -rf %{buildroot}
+mkdir -p %{buildroot}/usr/share/doc/iptables
+cp COPYING %{buildroot}/usr/share/doc/iptables/COPYING
 pushd ../build32/
 %make_install32
 if [ -d  %{buildroot}/usr/lib32/pkgconfig ]
@@ -178,28 +194,35 @@ install -m 0644 %{SOURCE4} %{buildroot}/usr/lib/systemd/system/iptables-save.ser
 
 %files bin
 %defattr(-,root,root,-)
-/usr/bin/arptables-compat
-/usr/bin/ebtables-compat
+/usr/bin/arptables
+/usr/bin/ebtables
 /usr/bin/ip6tables
-/usr/bin/ip6tables-compat
-/usr/bin/ip6tables-compat-restore
-/usr/bin/ip6tables-compat-save
+/usr/bin/ip6tables-legacy
+/usr/bin/ip6tables-legacy-restore
+/usr/bin/ip6tables-legacy-save
+/usr/bin/ip6tables-nft
+/usr/bin/ip6tables-nft-restore
+/usr/bin/ip6tables-nft-save
 /usr/bin/ip6tables-restore
 /usr/bin/ip6tables-restore-translate
 /usr/bin/ip6tables-save
 /usr/bin/ip6tables-translate
 /usr/bin/iptables
-/usr/bin/iptables-compat
-/usr/bin/iptables-compat-restore
-/usr/bin/iptables-compat-save
+/usr/bin/iptables-legacy
+/usr/bin/iptables-legacy-restore
+/usr/bin/iptables-legacy-save
+/usr/bin/iptables-nft
+/usr/bin/iptables-nft-restore
+/usr/bin/iptables-nft-save
 /usr/bin/iptables-restore
 /usr/bin/iptables-restore-translate
 /usr/bin/iptables-save
 /usr/bin/iptables-translate
 /usr/bin/iptables-xml
 /usr/bin/nfnl_osf
-/usr/bin/xtables-compat-multi
-/usr/bin/xtables-multi
+/usr/bin/xtables-legacy-multi
+/usr/bin/xtables-monitor
+/usr/bin/xtables-nft-multi
 
 %files config
 %defattr(-,root,root,-)
@@ -244,11 +267,6 @@ install -m 0644 %{SOURCE4} %{buildroot}/usr/lib/systemd/system/iptables-save.ser
 /usr/lib32/pkgconfig/libiptc.pc
 /usr/lib32/pkgconfig/xtables.pc
 
-%files doc
-%defattr(-,root,root,-)
-%doc /usr/share/man/man1/*
-%doc /usr/share/man/man8/*
-
 %files extras
 %defattr(-,root,root,-)
 /usr/lib64/libip4tc.so.0
@@ -266,12 +284,20 @@ install -m 0644 %{SOURCE4} %{buildroot}/usr/lib/systemd/system/iptables-save.ser
 /usr/lib64/libxtables.so.12.0.0
 /usr/lib64/xtables/libarpt_mangle.so
 /usr/lib64/xtables/libebt_802_3.so
+/usr/lib64/xtables/libebt_arp.so
+/usr/lib64/xtables/libebt_dnat.so
 /usr/lib64/xtables/libebt_ip.so
+/usr/lib64/xtables/libebt_ip6.so
 /usr/lib64/xtables/libebt_limit.so
 /usr/lib64/xtables/libebt_log.so
 /usr/lib64/xtables/libebt_mark.so
 /usr/lib64/xtables/libebt_mark_m.so
 /usr/lib64/xtables/libebt_nflog.so
+/usr/lib64/xtables/libebt_pkttype.so
+/usr/lib64/xtables/libebt_redirect.so
+/usr/lib64/xtables/libebt_snat.so
+/usr/lib64/xtables/libebt_stp.so
+/usr/lib64/xtables/libebt_vlan.so
 /usr/lib64/xtables/libip6t_DNAT.so
 /usr/lib64/xtables/libip6t_DNPT.so
 /usr/lib64/xtables/libip6t_HL.so
@@ -510,4 +536,32 @@ install -m 0644 %{SOURCE4} %{buildroot}/usr/lib/systemd/system/iptables-save.ser
 /usr/lib32/libiptc.so.0.0.0
 /usr/lib32/libxtables.so.12
 /usr/lib32/libxtables.so.12.0.0
+/usr/lib32/xtables/libebt_arp.so
+/usr/lib32/xtables/libebt_dnat.so
+/usr/lib32/xtables/libebt_ip6.so
+/usr/lib32/xtables/libebt_pkttype.so
+/usr/lib32/xtables/libebt_redirect.so
+/usr/lib32/xtables/libebt_snat.so
+/usr/lib32/xtables/libebt_stp.so
+/usr/lib32/xtables/libebt_vlan.so
 /usr/lib32/xtables/libip6t_srh.so
+
+%files license
+%defattr(-,root,root,-)
+/usr/share/doc/iptables/COPYING
+
+%files man
+%defattr(-,root,root,-)
+/usr/share/man/man1/iptables-xml.1
+/usr/share/man/man8/ip6tables-restore.8
+/usr/share/man/man8/ip6tables-save.8
+/usr/share/man/man8/ip6tables.8
+/usr/share/man/man8/iptables-extensions.8
+/usr/share/man/man8/iptables-restore.8
+/usr/share/man/man8/iptables-save.8
+/usr/share/man/man8/iptables.8
+/usr/share/man/man8/nfnl_osf.8
+/usr/share/man/man8/xtables-legacy.8
+/usr/share/man/man8/xtables-monitor.8
+/usr/share/man/man8/xtables-nft.8
+/usr/share/man/man8/xtables-translate.8

@@ -67,7 +67,9 @@ libxtables.so.12:xt_xlate_get_comment
 libxtables.so.12:xtables_calloc
 libxtables.so.12:xtables_compatible_revision
 libxtables.so.12:xtables_find_match
+libxtables.so.12:xtables_find_match_revision
 libxtables.so.12:xtables_find_target
+libxtables.so.12:xtables_find_target_revision
 libxtables.so.12:xtables_free_opts
 libxtables.so.12:xtables_init
 libxtables.so.12:xtables_init_all
@@ -106,7 +108,9 @@ libxtables.so.12:xtables_param_act
 libxtables.so.12:xtables_parse_interface
 libxtables.so.12:xtables_parse_port
 libxtables.so.12:xtables_parse_protocol
+libxtables.so.12:xtables_parse_val_mask
 libxtables.so.12:xtables_print_num
+libxtables.so.12:xtables_print_val_mask
 libxtables.so.12:xtables_realloc
 libxtables.so.12:xtables_register_match
 libxtables.so.12:xtables_register_matches

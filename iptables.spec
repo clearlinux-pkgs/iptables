@@ -5,24 +5,24 @@
 # Source0 file verified with key 0xAB4655A126D292E4 (coreteam@netfilter.org)
 #
 Name     : iptables
-Version  : 1.8.0
-Release  : 26
-URL      : https://www.netfilter.org/projects/iptables/files/iptables-1.8.0.tar.bz2
-Source0  : https://www.netfilter.org/projects/iptables/files/iptables-1.8.0.tar.bz2
+Version  : 1.8.1
+Release  : 27
+URL      : https://www.netfilter.org/projects/iptables/files/iptables-1.8.1.tar.bz2
+Source0  : https://www.netfilter.org/projects/iptables/files/iptables-1.8.1.tar.bz2
 Source1  : ip6tables-restore.service
 Source2  : ip6tables-save.service
 Source3  : iptables-restore.service
 Source4  : iptables-save.service
-Source99 : https://www.netfilter.org/projects/iptables/files/iptables-1.8.0.tar.bz2.sig
+Source99 : https://www.netfilter.org/projects/iptables/files/iptables-1.8.1.tar.bz2.sig
 Summary  : Shared Xtables code for extensions and iproute2
 Group    : Development/Tools
 License  : GPL-2.0
-Requires: iptables-bin
-Requires: iptables-config
-Requires: iptables-lib
-Requires: iptables-license
-Requires: iptables-man
-Requires: iptables-data
+Requires: iptables-bin = %{version}-%{release}
+Requires: iptables-config = %{version}-%{release}
+Requires: iptables-data = %{version}-%{release}
+Requires: iptables-lib = %{version}-%{release}
+Requires: iptables-license = %{version}-%{release}
+Requires: iptables-man = %{version}-%{release}
 BuildRequires : bison
 BuildRequires : flex
 BuildRequires : gcc-dev32
@@ -42,15 +42,20 @@ BuildRequires : pkgconfig(libnftnl)
 Patch1: cve-2012-2663.patch
 
 %description
-No detailed description available
+To run the test suite (as root):
+$ cd iptables/tests/shell
+# ./run-tests.sh
+Test files are executable files with the pattern <<name_N>> , where N is the
+expected return code of the executable. Since they are located with `find',
+test-files can be spreaded in any sub-directories.
 
 %package bin
 Summary: bin components for the iptables package.
 Group: Binaries
-Requires: iptables-data
-Requires: iptables-config
-Requires: iptables-license
-Requires: iptables-man
+Requires: iptables-data = %{version}-%{release}
+Requires: iptables-config = %{version}-%{release}
+Requires: iptables-license = %{version}-%{release}
+Requires: iptables-man = %{version}-%{release}
 
 %description bin
 bin components for the iptables package.
@@ -75,10 +80,10 @@ data components for the iptables package.
 %package dev
 Summary: dev components for the iptables package.
 Group: Development
-Requires: iptables-lib
-Requires: iptables-bin
-Requires: iptables-data
-Provides: iptables-devel
+Requires: iptables-lib = %{version}-%{release}
+Requires: iptables-bin = %{version}-%{release}
+Requires: iptables-data = %{version}-%{release}
+Provides: iptables-devel = %{version}-%{release}
 
 %description dev
 dev components for the iptables package.
@@ -87,10 +92,10 @@ dev components for the iptables package.
 %package dev32
 Summary: dev32 components for the iptables package.
 Group: Default
-Requires: iptables-lib32
-Requires: iptables-bin
-Requires: iptables-data
-Requires: iptables-dev
+Requires: iptables-lib32 = %{version}-%{release}
+Requires: iptables-bin = %{version}-%{release}
+Requires: iptables-data = %{version}-%{release}
+Requires: iptables-dev = %{version}-%{release}
 
 %description dev32
 dev32 components for the iptables package.
@@ -107,8 +112,8 @@ extras components for the iptables package.
 %package lib
 Summary: lib components for the iptables package.
 Group: Libraries
-Requires: iptables-data
-Requires: iptables-license
+Requires: iptables-data = %{version}-%{release}
+Requires: iptables-license = %{version}-%{release}
 
 %description lib
 lib components for the iptables package.
@@ -117,8 +122,8 @@ lib components for the iptables package.
 %package lib32
 Summary: lib32 components for the iptables package.
 Group: Default
-Requires: iptables-data
-Requires: iptables-license
+Requires: iptables-data = %{version}-%{release}
+Requires: iptables-license = %{version}-%{release}
 
 %description lib32
 lib32 components for the iptables package.
@@ -141,10 +146,10 @@ man components for the iptables package.
 
 
 %prep
-%setup -q -n iptables-1.8.0
+%setup -q -n iptables-1.8.1
 %patch1 -p1
 pushd ..
-cp -a iptables-1.8.0 build32
+cp -a iptables-1.8.1 build32
 popd
 
 %build
@@ -152,7 +157,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1533850297
+export SOURCE_DATE_EPOCH=1540291370
 export CFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-semantic-interposition -fstack-protector-strong -mzero-caller-saved-regs=used "
 export FCFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-semantic-interposition -fstack-protector-strong -mzero-caller-saved-regs=used "
 export FFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-semantic-interposition -fstack-protector-strong -mzero-caller-saved-regs=used "
@@ -162,6 +167,7 @@ make
 
 pushd ../build32/
 export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+export ASFLAGS="$ASFLAGS --32"
 export CFLAGS="$CFLAGS -m32"
 export CXXFLAGS="$CXXFLAGS -m32"
 export LDFLAGS="$LDFLAGS -m32"
@@ -169,10 +175,10 @@ export LDFLAGS="$LDFLAGS -m32"
 make
 popd
 %install
-export SOURCE_DATE_EPOCH=1533850297
+export SOURCE_DATE_EPOCH=1540291370
 rm -rf %{buildroot}
-mkdir -p %{buildroot}/usr/share/doc/iptables
-cp COPYING %{buildroot}/usr/share/doc/iptables/COPYING
+mkdir -p %{buildroot}/usr/share/package-licenses/iptables
+cp COPYING %{buildroot}/usr/share/package-licenses/iptables/COPYING
 pushd ../build32/
 %make_install32
 if [ -d  %{buildroot}/usr/lib32/pkgconfig ]
@@ -195,7 +201,17 @@ install -m 0644 %{SOURCE4} %{buildroot}/usr/lib/systemd/system/iptables-save.ser
 %files bin
 %defattr(-,root,root,-)
 /usr/bin/arptables
+/usr/bin/arptables-nft
+/usr/bin/arptables-nft-restore
+/usr/bin/arptables-nft-save
+/usr/bin/arptables-restore
+/usr/bin/arptables-save
 /usr/bin/ebtables
+/usr/bin/ebtables-nft
+/usr/bin/ebtables-nft-restore
+/usr/bin/ebtables-nft-save
+/usr/bin/ebtables-restore
+/usr/bin/ebtables-save
 /usr/bin/ip6tables
 /usr/bin/ip6tables-legacy
 /usr/bin/ip6tables-legacy-restore
@@ -281,14 +297,13 @@ install -m 0644 %{SOURCE4} %{buildroot}/usr/lib/systemd/system/iptables-save.ser
 /usr/lib64/libiptc.so.0
 /usr/lib64/libiptc.so.0.0.0
 /usr/lib64/libxtables.so.12
-/usr/lib64/libxtables.so.12.0.0
+/usr/lib64/libxtables.so.12.1.0
 /usr/lib64/xtables/libarpt_mangle.so
 /usr/lib64/xtables/libebt_802_3.so
 /usr/lib64/xtables/libebt_arp.so
 /usr/lib64/xtables/libebt_dnat.so
 /usr/lib64/xtables/libebt_ip.so
 /usr/lib64/xtables/libebt_ip6.so
-/usr/lib64/xtables/libebt_limit.so
 /usr/lib64/xtables/libebt_log.so
 /usr/lib64/xtables/libebt_mark.so
 /usr/lib64/xtables/libebt_mark_m.so
@@ -382,7 +397,6 @@ install -m 0644 %{SOURCE4} %{buildroot}/usr/lib/systemd/system/iptables-save.ser
 /usr/lib64/xtables/libxt_length.so
 /usr/lib64/xtables/libxt_limit.so
 /usr/lib64/xtables/libxt_mac.so
-/usr/lib64/xtables/libxt_mangle.so
 /usr/lib64/xtables/libxt_mark.so
 /usr/lib64/xtables/libxt_multiport.so
 /usr/lib64/xtables/libxt_nfacct.so
@@ -414,7 +428,6 @@ install -m 0644 %{SOURCE4} %{buildroot}/usr/lib/systemd/system/iptables-save.ser
 %exclude /usr/lib32/xtables/libarpt_mangle.so
 %exclude /usr/lib32/xtables/libebt_802_3.so
 %exclude /usr/lib32/xtables/libebt_ip.so
-%exclude /usr/lib32/xtables/libebt_limit.so
 %exclude /usr/lib32/xtables/libebt_log.so
 %exclude /usr/lib32/xtables/libebt_mark.so
 %exclude /usr/lib32/xtables/libebt_mark_m.so
@@ -502,7 +515,6 @@ install -m 0644 %{SOURCE4} %{buildroot}/usr/lib/systemd/system/iptables-save.ser
 %exclude /usr/lib32/xtables/libxt_length.so
 %exclude /usr/lib32/xtables/libxt_limit.so
 %exclude /usr/lib32/xtables/libxt_mac.so
-%exclude /usr/lib32/xtables/libxt_mangle.so
 %exclude /usr/lib32/xtables/libxt_mark.so
 %exclude /usr/lib32/xtables/libxt_multiport.so
 %exclude /usr/lib32/xtables/libxt_nfacct.so
@@ -535,7 +547,7 @@ install -m 0644 %{SOURCE4} %{buildroot}/usr/lib/systemd/system/iptables-save.ser
 /usr/lib32/libiptc.so.0
 /usr/lib32/libiptc.so.0.0.0
 /usr/lib32/libxtables.so.12
-/usr/lib32/libxtables.so.12.0.0
+/usr/lib32/libxtables.so.12.1.0
 /usr/lib32/xtables/libebt_arp.so
 /usr/lib32/xtables/libebt_dnat.so
 /usr/lib32/xtables/libebt_ip6.so
@@ -547,11 +559,11 @@ install -m 0644 %{SOURCE4} %{buildroot}/usr/lib/systemd/system/iptables-save.ser
 /usr/lib32/xtables/libip6t_srh.so
 
 %files license
-%defattr(-,root,root,-)
-/usr/share/doc/iptables/COPYING
+%defattr(0644,root,root,0755)
+/usr/share/package-licenses/iptables/COPYING
 
 %files man
-%defattr(-,root,root,-)
+%defattr(0644,root,root,0755)
 /usr/share/man/man1/iptables-xml.1
 /usr/share/man/man8/ip6tables-restore.8
 /usr/share/man/man8/ip6tables-save.8

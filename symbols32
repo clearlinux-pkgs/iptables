@@ -71,6 +71,8 @@ libxtables.so.12:xtables_find_match_revision
 libxtables.so.12:xtables_find_target
 libxtables.so.12:xtables_find_target_revision
 libxtables.so.12:xtables_free_opts
+libxtables.so.12:xtables_getethertypebyname
+libxtables.so.12:xtables_getethertypebynumber
 libxtables.so.12:xtables_init
 libxtables.so.12:xtables_init_all
 libxtables.so.12:xtables_insmod

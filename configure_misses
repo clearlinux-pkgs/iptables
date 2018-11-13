@@ -1,6 +1,17 @@
 Configure miss: linux/proc_fs.h usability
 Configure miss: linux/proc_fs.h presence
 Configure miss: linux/proc_fs.h
+Configure miss: libipt_icmp.c:239:5: warning: format not a string literal and no format arguments [-Wformat-security]
+
+Configure miss: libip6t_icmp6.c:233:3: warning: format not a string literal and no format arguments [-Wformat-security]
+
+Configure miss: libip6t_icmp6.c:242:4: warning: format not a string literal and no format arguments [-Wformat-security]
+
 Configure miss: linux/proc_fs.h usability
 Configure miss: linux/proc_fs.h presence
 Configure miss: linux/proc_fs.h
+Configure miss: libipt_icmp.c:239:5: warning: format not a string literal and no format arguments [-Wformat-security]
+
+Configure miss: libip6t_icmp6.c:233:3: warning: format not a string literal and no format arguments [-Wformat-security]
+
+Configure miss: libip6t_icmp6.c:242:4: warning: format not a string literal and no format arguments [-Wformat-security]

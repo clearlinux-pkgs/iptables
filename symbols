@@ -111,6 +111,8 @@ libxtables.so.12:xtables_parse_interface
 libxtables.so.12:xtables_parse_port
 libxtables.so.12:xtables_parse_protocol
 libxtables.so.12:xtables_parse_val_mask
+libxtables.so.12:xtables_print_mac
+libxtables.so.12:xtables_print_mac_and_mask
 libxtables.so.12:xtables_print_num
 libxtables.so.12:xtables_print_val_mask
 libxtables.so.12:xtables_realloc

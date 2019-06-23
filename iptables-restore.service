@@ -3,6 +3,8 @@ Description=Restore IPv4 firewall settings across reboots
 ConditionPathExists=/etc/iptables.rules
 Before=network-pre.target
 Wants=network-pre.target
+After=tallow.service
+Wants=tallow.service
 
 [Service]
 Type=oneshot

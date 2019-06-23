@@ -3,6 +3,8 @@ Description=Restore IPv6 firewall settings across reboots
 ConditionPathExists=/etc/ip6tables.rules
 Before=network-pre.target
 Wants=network-pre.target
+After=tallow.service
+Wants=tallow.service
 
 [Service]
 Type=oneshot

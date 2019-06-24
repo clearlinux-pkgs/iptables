@@ -6,7 +6,7 @@
 #
 Name     : iptables
 Version  : 1.8.2
-Release  : 29
+Release  : 30
 URL      : https://www.netfilter.org/projects/iptables/files/iptables-1.8.2.tar.bz2
 Source0  : https://www.netfilter.org/projects/iptables/files/iptables-1.8.2.tar.bz2
 Source1  : ip6tables-restore.service
@@ -42,19 +42,13 @@ BuildRequires : pkgconfig(libnftnl)
 Patch1: cve-2012-2663.patch
 
 %description
-To run the test suite (as root):
-$ cd iptables/tests/shell
-# ./run-tests.sh
-Test files are executable files with the pattern <<name_N>> , where N is the
-expected return code of the executable. Since they are located with `find',
-test-files can be spreaded in any sub-directories.
+No detailed description available
 
 %package bin
 Summary: bin components for the iptables package.
 Group: Binaries
 Requires: iptables-data = %{version}-%{release}
 Requires: iptables-license = %{version}-%{release}
-Requires: iptables-man = %{version}-%{release}
 Requires: iptables-services = %{version}-%{release}
 
 %description bin
@@ -76,6 +70,7 @@ Requires: iptables-lib = %{version}-%{release}
 Requires: iptables-bin = %{version}-%{release}
 Requires: iptables-data = %{version}-%{release}
 Provides: iptables-devel = %{version}-%{release}
+Requires: iptables = %{version}-%{release}
 
 %description dev
 dev components for the iptables package.
@@ -157,25 +152,26 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1542109491
-export CFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-semantic-interposition -fstack-protector-strong -mzero-caller-saved-regs=used "
-export FCFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-semantic-interposition -fstack-protector-strong -mzero-caller-saved-regs=used "
-export FFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-semantic-interposition -fstack-protector-strong -mzero-caller-saved-regs=used "
-export CXXFLAGS="$CXXFLAGS -Os -fdata-sections -ffunction-sections -fno-semantic-interposition -fstack-protector-strong -mzero-caller-saved-regs=used "
+export SOURCE_DATE_EPOCH=1561396687
+export GCC_IGNORE_WERROR=1
+export CFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-lto -fno-semantic-interposition -fstack-protector-strong -mzero-caller-saved-regs=used "
+export FCFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-lto -fno-semantic-interposition -fstack-protector-strong -mzero-caller-saved-regs=used "
+export FFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-lto -fno-semantic-interposition -fstack-protector-strong -mzero-caller-saved-regs=used "
+export CXXFLAGS="$CXXFLAGS -Os -fdata-sections -ffunction-sections -fno-lto -fno-semantic-interposition -fstack-protector-strong -mzero-caller-saved-regs=used "
 %configure --disable-static --enable-devel --enable-ipv6
 make
 
 pushd ../build32/
 export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
-export ASFLAGS="$ASFLAGS --32"
-export CFLAGS="$CFLAGS -m32"
-export CXXFLAGS="$CXXFLAGS -m32"
-export LDFLAGS="$LDFLAGS -m32"
+export ASFLAGS="${ASFLAGS}${ASFLAGS:+ }--32"
+export CFLAGS="${CFLAGS}${CFLAGS:+ }-m32"
+export CXXFLAGS="${CXXFLAGS}${CXXFLAGS:+ }-m32"
+export LDFLAGS="${LDFLAGS}${LDFLAGS:+ }-m32"
 %configure --disable-static --enable-devel --enable-ipv6   --libdir=/usr/lib32 --build=i686-generic-linux-gnu --host=i686-generic-linux-gnu --target=i686-clr-linux-gnu
 make
 popd
 %install
-export SOURCE_DATE_EPOCH=1542109491
+export SOURCE_DATE_EPOCH=1561396687
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/iptables
 cp COPYING %{buildroot}/usr/share/package-licenses/iptables/COPYING

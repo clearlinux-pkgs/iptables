@@ -5,15 +5,15 @@
 # Source0 file verified with key 0xAB4655A126D292E4 (coreteam@netfilter.org)
 #
 Name     : iptables
-Version  : 1.8.2
-Release  : 30
-URL      : https://www.netfilter.org/projects/iptables/files/iptables-1.8.2.tar.bz2
-Source0  : https://www.netfilter.org/projects/iptables/files/iptables-1.8.2.tar.bz2
+Version  : 1.8.3
+Release  : 31
+URL      : https://www.netfilter.org/projects/iptables/files/iptables-1.8.3.tar.bz2
+Source0  : https://www.netfilter.org/projects/iptables/files/iptables-1.8.3.tar.bz2
 Source1  : ip6tables-restore.service
 Source2  : ip6tables-save.service
 Source3  : iptables-restore.service
 Source4  : iptables-save.service
-Source99 : https://www.netfilter.org/projects/iptables/files/iptables-1.8.2.tar.bz2.sig
+Source99 : https://www.netfilter.org/projects/iptables/files/iptables-1.8.3.tar.bz2.sig
 Summary  : Shared Xtables code for extensions and iproute2
 Group    : Development/Tools
 License  : GPL-2.0
@@ -141,18 +141,18 @@ services components for the iptables package.
 
 
 %prep
-%setup -q -n iptables-1.8.2
+%setup -q -n iptables-1.8.3
 %patch1 -p1
 pushd ..
-cp -a iptables-1.8.2 build32
+cp -a iptables-1.8.3 build32
 popd
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
-export LANG=C
-export SOURCE_DATE_EPOCH=1561396687
+export LANG=C.UTF-8
+export SOURCE_DATE_EPOCH=1562975743
 export GCC_IGNORE_WERROR=1
 export CFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-lto -fno-semantic-interposition -fstack-protector-strong -mzero-caller-saved-regs=used "
 export FCFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-lto -fno-semantic-interposition -fstack-protector-strong -mzero-caller-saved-regs=used "
@@ -171,7 +171,7 @@ export LDFLAGS="${LDFLAGS}${LDFLAGS:+ }-m32"
 make
 popd
 %install
-export SOURCE_DATE_EPOCH=1561396687
+export SOURCE_DATE_EPOCH=1562975743
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/iptables
 cp COPYING %{buildroot}/usr/share/package-licenses/iptables/COPYING
@@ -274,15 +274,17 @@ install -m 0644 %{SOURCE4} %{buildroot}/usr/lib/systemd/system/iptables-save.ser
 
 %files extras
 %defattr(-,root,root,-)
-/usr/lib64/libip4tc.so.0
-/usr/lib64/libip4tc.so.0.1.0
+/usr/lib64/libip4tc.so.2
+/usr/lib64/libip4tc.so.2.0.0
+/usr/lib64/libip6tc.so.2
+/usr/lib64/libip6tc.so.2.0.0
 
 %files lib
 %defattr(-,root,root,-)
-%exclude /usr/lib64/libip4tc.so.0
-%exclude /usr/lib64/libip4tc.so.0.1.0
-/usr/lib64/libip6tc.so.0
-/usr/lib64/libip6tc.so.0.1.0
+%exclude /usr/lib64/libip4tc.so.2
+%exclude /usr/lib64/libip4tc.so.2.0.0
+%exclude /usr/lib64/libip6tc.so.2
+%exclude /usr/lib64/libip6tc.so.2.0.0
 /usr/lib64/libiptc.so.0
 /usr/lib64/libiptc.so.0.0.0
 /usr/lib64/libxtables.so.12
@@ -530,10 +532,10 @@ install -m 0644 %{SOURCE4} %{buildroot}/usr/lib/systemd/system/iptables-save.ser
 %exclude /usr/lib32/xtables/libxt_tos.so
 %exclude /usr/lib32/xtables/libxt_u32.so
 %exclude /usr/lib32/xtables/libxt_udp.so
-/usr/lib32/libip4tc.so.0
-/usr/lib32/libip4tc.so.0.1.0
-/usr/lib32/libip6tc.so.0
-/usr/lib32/libip6tc.so.0.1.0
+/usr/lib32/libip4tc.so.2
+/usr/lib32/libip4tc.so.2.0.0
+/usr/lib32/libip6tc.so.2
+/usr/lib32/libip6tc.so.2.0.0
 /usr/lib32/libiptc.so.0
 /usr/lib32/libiptc.so.0.0.0
 /usr/lib32/libxtables.so.12
@@ -556,12 +558,18 @@ install -m 0644 %{SOURCE4} %{buildroot}/usr/lib/systemd/system/iptables-save.ser
 %files man
 %defattr(0644,root,root,0755)
 /usr/share/man/man1/iptables-xml.1
+/usr/share/man/man8/arptables-nft-restore.8
+/usr/share/man/man8/arptables-nft-save.8
+/usr/share/man/man8/arptables-nft.8
+/usr/share/man/man8/ebtables-nft.8
 /usr/share/man/man8/ip6tables-restore.8
 /usr/share/man/man8/ip6tables-save.8
+/usr/share/man/man8/ip6tables-translate.8
 /usr/share/man/man8/ip6tables.8
 /usr/share/man/man8/iptables-extensions.8
 /usr/share/man/man8/iptables-restore.8
 /usr/share/man/man8/iptables-save.8
+/usr/share/man/man8/iptables-translate.8
 /usr/share/man/man8/iptables.8
 /usr/share/man/man8/nfnl_osf.8
 /usr/share/man/man8/xtables-legacy.8

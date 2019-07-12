@@ -1,2 +1,4 @@
-/usr/lib64/libip4tc.so.0
-/usr/lib64/libip4tc.so.0.1.0
+/usr/lib64/libip4tc.so.2
+/usr/lib64/libip4tc.so.2.0.0
+/usr/lib64/libip6tc.so.2
+/usr/lib64/libip6tc.so.2.0.0

@@ -9,7 +9,7 @@ Wants=tallow.service
 [Service]
 Type=oneshot
 RemainAfterExit=true
-ExecStart=/usr/bin/iptables-restore /etc/iptables.rules
+ExecStart=/usr/bin/iptables-restore --wait=5 /etc/iptables.rules
 
 [Install]
 WantedBy=multi-user.target

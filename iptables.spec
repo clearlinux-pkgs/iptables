@@ -6,14 +6,14 @@
 #
 Name     : iptables
 Version  : 1.8.3
-Release  : 31
+Release  : 32
 URL      : https://www.netfilter.org/projects/iptables/files/iptables-1.8.3.tar.bz2
 Source0  : https://www.netfilter.org/projects/iptables/files/iptables-1.8.3.tar.bz2
 Source1  : ip6tables-restore.service
 Source2  : ip6tables-save.service
 Source3  : iptables-restore.service
 Source4  : iptables-save.service
-Source99 : https://www.netfilter.org/projects/iptables/files/iptables-1.8.3.tar.bz2.sig
+Source5 : https://www.netfilter.org/projects/iptables/files/iptables-1.8.3.tar.bz2.sig
 Summary  : Shared Xtables code for extensions and iproute2
 Group    : Development/Tools
 License  : GPL-2.0
@@ -152,7 +152,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1562975743
+export SOURCE_DATE_EPOCH=1564176091
 export GCC_IGNORE_WERROR=1
 export CFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-lto -fno-semantic-interposition -fstack-protector-strong -mzero-caller-saved-regs=used "
 export FCFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-lto -fno-semantic-interposition -fstack-protector-strong -mzero-caller-saved-regs=used "
@@ -171,7 +171,7 @@ export LDFLAGS="${LDFLAGS}${LDFLAGS:+ }-m32"
 make
 popd
 %install
-export SOURCE_DATE_EPOCH=1562975743
+export SOURCE_DATE_EPOCH=1564176091
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/iptables
 cp COPYING %{buildroot}/usr/share/package-licenses/iptables/COPYING

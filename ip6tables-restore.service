@@ -9,7 +9,7 @@ Wants=tallow.service
 [Service]
 Type=oneshot
 RemainAfterExit=true
-ExecStart=/usr/bin/ip6tables-restore /etc/ip6tables.rules
+ExecStart=/usr/bin/ip6tables-restore --wait=5 /etc/ip6tables.rules
 
 [Install]
 WantedBy=multi-user.target

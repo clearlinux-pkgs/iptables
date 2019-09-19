@@ -6,7 +6,7 @@
 #
 Name     : iptables
 Version  : 1.8.3
-Release  : 33
+Release  : 34
 URL      : https://www.netfilter.org/projects/iptables/files/iptables-1.8.3.tar.bz2
 Source0  : https://www.netfilter.org/projects/iptables/files/iptables-1.8.3.tar.bz2
 Source1  : ip6tables-restore.service
@@ -152,7 +152,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1564441068
+export SOURCE_DATE_EPOCH=1568861190
 export GCC_IGNORE_WERROR=1
 export CFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-lto -fno-semantic-interposition -fstack-protector-strong -mzero-caller-saved-regs=used "
 export FCFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-lto -fno-semantic-interposition -fstack-protector-strong -mzero-caller-saved-regs=used "
@@ -164,14 +164,14 @@ make
 pushd ../build32/
 export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
 export ASFLAGS="${ASFLAGS}${ASFLAGS:+ }--32"
-export CFLAGS="${CFLAGS}${CFLAGS:+ }-m32"
-export CXXFLAGS="${CXXFLAGS}${CXXFLAGS:+ }-m32"
-export LDFLAGS="${LDFLAGS}${LDFLAGS:+ }-m32"
+export CFLAGS="${CFLAGS}${CFLAGS:+ }-m32 -mstackrealign"
+export CXXFLAGS="${CXXFLAGS}${CXXFLAGS:+ }-m32 -mstackrealign"
+export LDFLAGS="${LDFLAGS}${LDFLAGS:+ }-m32 -mstackrealign"
 %configure --disable-static --enable-devel --enable-ipv6   --libdir=/usr/lib32 --build=i686-generic-linux-gnu --host=i686-generic-linux-gnu --target=i686-clr-linux-gnu
 make
 popd
 %install
-export SOURCE_DATE_EPOCH=1564441068
+export SOURCE_DATE_EPOCH=1568861190
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/iptables
 cp COPYING %{buildroot}/usr/share/package-licenses/iptables/COPYING
@@ -360,12 +360,13 @@ rm -f %{buildroot}/usr/lib32/xtables/libxt_udp.so
 
 %files dev
 %defattr(-,root,root,-)
-/usr/include/*.h
 /usr/include/libiptc/ipt_kernel_headers.h
 /usr/include/libiptc/libip6tc.h
 /usr/include/libiptc/libiptc.h
 /usr/include/libiptc/libxtc.h
 /usr/include/libiptc/xtcshared.h
+/usr/include/xtables-version.h
+/usr/include/xtables.h
 /usr/lib64/libip4tc.so
 /usr/lib64/libip6tc.so
 /usr/lib64/libiptc.so

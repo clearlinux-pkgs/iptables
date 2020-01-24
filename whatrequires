@@ -3,3 +3,4 @@ NetworkManager
 ebtables
 firewalld
 libvirt
+tallow

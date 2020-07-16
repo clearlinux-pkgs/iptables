@@ -6,7 +6,7 @@
 #
 Name     : iptables
 Version  : 1.8.5
-Release  : 38
+Release  : 39
 URL      : https://www.netfilter.org/pub/iptables/iptables-1.8.5.tar.bz2
 Source0  : https://www.netfilter.org/pub/iptables/iptables-1.8.5.tar.bz2
 Source1  : ip6tables-restore.service
@@ -23,14 +23,21 @@ Requires: iptables-lib = %{version}-%{release}
 Requires: iptables-license = %{version}-%{release}
 Requires: iptables-man = %{version}-%{release}
 Requires: iptables-services = %{version}-%{release}
+BuildRequires : automake
+BuildRequires : automake-dev
 BuildRequires : bison
 BuildRequires : flex
 BuildRequires : gcc-dev32
 BuildRequires : gcc-libgcc32
 BuildRequires : gcc-libstdc++32
+BuildRequires : gettext-bin
 BuildRequires : glibc-dev32
 BuildRequires : glibc-libc32
+BuildRequires : libtool
+BuildRequires : libtool-dev
+BuildRequires : m4
 BuildRequires : pkg-config
+BuildRequires : pkg-config-dev
 BuildRequires : pkgconfig(32libmnl)
 BuildRequires : pkgconfig(32libnetfilter_conntrack)
 BuildRequires : pkgconfig(32libnfnetlink)
@@ -40,6 +47,7 @@ BuildRequires : pkgconfig(libnetfilter_conntrack)
 BuildRequires : pkgconfig(libnfnetlink)
 BuildRequires : pkgconfig(libnftnl)
 Patch1: cve-2012-2663.patch
+Patch2: iptables-apply-install.patch
 
 %description
 No detailed description available
@@ -144,6 +152,7 @@ services components for the iptables package.
 %setup -q -n iptables-1.8.5
 cd %{_builddir}/iptables-1.8.5
 %patch1 -p1
+%patch2 -p1
 pushd ..
 cp -a iptables-1.8.5 build32
 popd
@@ -153,26 +162,26 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1594870419
+export SOURCE_DATE_EPOCH=1594918025
 export GCC_IGNORE_WERROR=1
 export CFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-lto -fno-semantic-interposition -fstack-protector-strong -mzero-caller-saved-regs=used "
 export FCFLAGS="$FFLAGS -Os -fdata-sections -ffunction-sections -fno-lto -fno-semantic-interposition -fstack-protector-strong -mzero-caller-saved-regs=used "
 export FFLAGS="$FFLAGS -Os -fdata-sections -ffunction-sections -fno-lto -fno-semantic-interposition -fstack-protector-strong -mzero-caller-saved-regs=used "
 export CXXFLAGS="$CXXFLAGS -Os -fdata-sections -ffunction-sections -fno-lto -fno-semantic-interposition -fstack-protector-strong -mzero-caller-saved-regs=used "
-%configure --disable-static --enable-devel --enable-ipv6
+%reconfigure --disable-static --enable-devel --enable-ipv6
 make
-
 pushd ../build32/
 export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
 export ASFLAGS="${ASFLAGS}${ASFLAGS:+ }--32"
 export CFLAGS="${CFLAGS}${CFLAGS:+ }-m32 -mstackrealign"
 export CXXFLAGS="${CXXFLAGS}${CXXFLAGS:+ }-m32 -mstackrealign"
 export LDFLAGS="${LDFLAGS}${LDFLAGS:+ }-m32 -mstackrealign"
-%configure --disable-static --enable-devel --enable-ipv6   --libdir=/usr/lib32 --build=i686-generic-linux-gnu --host=i686-generic-linux-gnu --target=i686-clr-linux-gnu
+%reconfigure --disable-static --enable-devel --enable-ipv6  --libdir=/usr/lib32 --build=i686-generic-linux-gnu --host=i686-generic-linux-gnu --target=i686-clr-linux-gnu
 make
 popd
+
 %install
-export SOURCE_DATE_EPOCH=1594870419
+export SOURCE_DATE_EPOCH=1594918025
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/iptables
 cp %{_builddir}/iptables-1.8.5/COPYING %{buildroot}/usr/share/package-licenses/iptables/4cc77b90af91e615a64ae04893fdffa7939db84c
@@ -340,6 +349,7 @@ rm -f %{buildroot}/usr/lib32/xtables/libxt_udp.so
 /usr/bin/ip6tables-save
 /usr/bin/ip6tables-translate
 /usr/bin/iptables
+/usr/bin/iptables-apply
 /usr/bin/iptables-legacy
 /usr/bin/iptables-legacy-restore
 /usr/bin/iptables-legacy-save

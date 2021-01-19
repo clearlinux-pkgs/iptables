@@ -5,15 +5,15 @@
 # Source0 file verified with key 0xD55D978A8A1420E4 (coreteam@netfilter.org)
 #
 Name     : iptables
-Version  : 1.8.6
-Release  : 41
-URL      : https://www.netfilter.org/pub/iptables/iptables-1.8.6.tar.bz2
-Source0  : https://www.netfilter.org/pub/iptables/iptables-1.8.6.tar.bz2
+Version  : 1.8.7
+Release  : 42
+URL      : https://www.netfilter.org/pub/iptables/iptables-1.8.7.tar.bz2
+Source0  : https://www.netfilter.org/pub/iptables/iptables-1.8.7.tar.bz2
 Source1  : ip6tables-restore.service
 Source2  : ip6tables-save.service
 Source3  : iptables-restore.service
 Source4  : iptables-save.service
-Source5  : https://www.netfilter.org/pub/iptables/iptables-1.8.6.tar.bz2.sig
+Source5  : https://www.netfilter.org/pub/iptables/iptables-1.8.7.tar.bz2.sig
 Summary  : Shared Xtables code for extensions and iproute2
 Group    : Development/Tools
 License  : GPL-2.0
@@ -141,11 +141,11 @@ services components for the iptables package.
 
 
 %prep
-%setup -q -n iptables-1.8.6
-cd %{_builddir}/iptables-1.8.6
+%setup -q -n iptables-1.8.7
+cd %{_builddir}/iptables-1.8.7
 %patch1 -p1
 pushd ..
-cp -a iptables-1.8.6 build32
+cp -a iptables-1.8.7 build32
 popd
 
 %build
@@ -153,13 +153,14 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1604524419
+export SOURCE_DATE_EPOCH=1611075920
 export GCC_IGNORE_WERROR=1
 export CFLAGS="$CFLAGS -Os -fdata-sections -ffunction-sections -fno-lto -fno-semantic-interposition -fstack-protector-strong -mzero-caller-saved-regs=used "
 export FCFLAGS="$FFLAGS -Os -fdata-sections -ffunction-sections -fno-lto -fno-semantic-interposition -fstack-protector-strong -mzero-caller-saved-regs=used "
 export FFLAGS="$FFLAGS -Os -fdata-sections -ffunction-sections -fno-lto -fno-semantic-interposition -fstack-protector-strong -mzero-caller-saved-regs=used "
 export CXXFLAGS="$CXXFLAGS -Os -fdata-sections -ffunction-sections -fno-lto -fno-semantic-interposition -fstack-protector-strong -mzero-caller-saved-regs=used "
-%configure --disable-static --enable-devel --enable-ipv6
+%configure --disable-static --enable-devel \
+--enable-ipv6
 make
 
 pushd ../build32/
@@ -168,14 +169,15 @@ export ASFLAGS="${ASFLAGS}${ASFLAGS:+ }--32"
 export CFLAGS="${CFLAGS}${CFLAGS:+ }-m32 -mstackrealign"
 export CXXFLAGS="${CXXFLAGS}${CXXFLAGS:+ }-m32 -mstackrealign"
 export LDFLAGS="${LDFLAGS}${LDFLAGS:+ }-m32 -mstackrealign"
-%configure --disable-static --enable-devel --enable-ipv6   --libdir=/usr/lib32 --build=i686-generic-linux-gnu --host=i686-generic-linux-gnu --target=i686-clr-linux-gnu
+%configure --disable-static --enable-devel \
+--enable-ipv6   --libdir=/usr/lib32 --build=i686-generic-linux-gnu --host=i686-generic-linux-gnu --target=i686-clr-linux-gnu
 make
 popd
 %install
-export SOURCE_DATE_EPOCH=1604524419
+export SOURCE_DATE_EPOCH=1611075920
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/iptables
-cp %{_builddir}/iptables-1.8.6/COPYING %{buildroot}/usr/share/package-licenses/iptables/4cc77b90af91e615a64ae04893fdffa7939db84c
+cp %{_builddir}/iptables-1.8.7/COPYING %{buildroot}/usr/share/package-licenses/iptables/4cc77b90af91e615a64ae04893fdffa7939db84c
 pushd ../build32/
 %make_install32
 if [ -d  %{buildroot}/usr/lib32/pkgconfig ]
@@ -402,7 +404,7 @@ rm -f %{buildroot}/usr/lib32/xtables/libxt_udp.so
 %files lib
 %defattr(-,root,root,-)
 /usr/lib64/libxtables.so.12
-/usr/lib64/libxtables.so.12.3.0
+/usr/lib64/libxtables.so.12.4.0
 /usr/lib64/xtables/libarpt_mangle.so
 /usr/lib64/xtables/libebt_802_3.so
 /usr/lib64/xtables/libebt_among.so
@@ -537,7 +539,7 @@ rm -f %{buildroot}/usr/lib32/xtables/libxt_udp.so
 /usr/lib32/libip6tc.so.2
 /usr/lib32/libip6tc.so.2.0.0
 /usr/lib32/libxtables.so.12
-/usr/lib32/libxtables.so.12.3.0
+/usr/lib32/libxtables.so.12.4.0
 /usr/lib32/xtables/libebt_among.so
 /usr/lib32/xtables/libebt_arp.so
 /usr/lib32/xtables/libebt_arpreply.so

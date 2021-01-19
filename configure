@@ -1,1 +1,2 @@
---enable-devel --enable-ipv6
+--enable-devel
+--enable-ipv6

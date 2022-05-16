@@ -1,5 +1,4 @@
 libc.so.6
-libdl.so.2
 libip4tc.so.2
 libip6tc.so.2
 libm.so.6

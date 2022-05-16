@@ -58,12 +58,17 @@ libip6tc.so.2:ip6tc_zero_counter
 libip6tc.so.2:ip6tc_zero_entries
 libxtables.so.12:basic_exit_err
 libxtables.so.12:get_kernel_version
+libxtables.so.12:xl_xlate_set_family
 libxtables.so.12:xt_xlate_add
 libxtables.so.12:xt_xlate_add_comment
 libxtables.so.12:xt_xlate_alloc
 libxtables.so.12:xt_xlate_free
 libxtables.so.12:xt_xlate_get
 libxtables.so.12:xt_xlate_get_comment
+libxtables.so.12:xt_xlate_get_family
+libxtables.so.12:xt_xlate_set_add
+libxtables.so.12:xt_xlate_set_get
+libxtables.so.12:xtables_announce_chain
 libxtables.so.12:xtables_calloc
 libxtables.so.12:xtables_compatible_revision
 libxtables.so.12:xtables_find_match
@@ -128,5 +133,6 @@ libxtables.so.12:xtables_save_string
 libxtables.so.12:xtables_service_to_port
 libxtables.so.12:xtables_set_nfproto
 libxtables.so.12:xtables_set_params
+libxtables.so.12:xtables_strdup
 libxtables.so.12:xtables_strtoui
 libxtables.so.12:xtables_strtoul

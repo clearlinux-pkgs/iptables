@@ -49,6 +49,7 @@
 /usr/lib32/xtables/libxt_CONNMARK.so
 /usr/lib32/xtables/libxt_CONNSECMARK.so
 /usr/lib32/xtables/libxt_CT.so
+/usr/lib32/xtables/libxt_DNAT.so
 /usr/lib32/xtables/libxt_DSCP.so
 /usr/lib32/xtables/libxt_HMARK.so
 /usr/lib32/xtables/libxt_IDLETIMER.so
@@ -58,6 +59,7 @@
 /usr/lib32/xtables/libxt_NFQUEUE.so
 /usr/lib32/xtables/libxt_NOTRACK.so
 /usr/lib32/xtables/libxt_RATEEST.so
+/usr/lib32/xtables/libxt_REDIRECT.so
 /usr/lib32/xtables/libxt_SECMARK.so
 /usr/lib32/xtables/libxt_SET.so
 /usr/lib32/xtables/libxt_SYNPROXY.so

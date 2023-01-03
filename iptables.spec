@@ -6,7 +6,7 @@
 #
 Name     : iptables
 Version  : 1.8.8
-Release  : 45
+Release  : 46
 URL      : https://www.netfilter.org/pub/iptables/iptables-1.8.8.tar.bz2
 Source0  : https://www.netfilter.org/pub/iptables/iptables-1.8.8.tar.bz2
 Source1  : ip6tables-restore.service
@@ -156,7 +156,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1672442840
+export SOURCE_DATE_EPOCH=1672757508
 export GCC_IGNORE_WERROR=1
 export CFLAGS="$CFLAGS -Os -fdata-sections -fdebug-types-section -femit-struct-debug-baseonly -ffunction-sections -fno-lto -fno-semantic-interposition -fstack-protector-strong -fzero-call-used-regs=used -g1 -gno-column-info -gno-variable-location-views -gz "
 export FCFLAGS="$FFLAGS -Os -fdata-sections -fdebug-types-section -femit-struct-debug-baseonly -ffunction-sections -fno-lto -fno-semantic-interposition -fstack-protector-strong -fzero-call-used-regs=used -g1 -gno-column-info -gno-variable-location-views -gz "
@@ -177,7 +177,7 @@ export LDFLAGS="${LDFLAGS}${LDFLAGS:+ }-m32 -mstackrealign"
 make
 popd
 %install
-export SOURCE_DATE_EPOCH=1672442840
+export SOURCE_DATE_EPOCH=1672757508
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/iptables
 cp %{_builddir}/iptables-%{version}/COPYING %{buildroot}/usr/share/package-licenses/iptables/4cc77b90af91e615a64ae04893fdffa7939db84c || :

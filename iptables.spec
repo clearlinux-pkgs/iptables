@@ -5,15 +5,15 @@
 # Source0 file verified with key 0xD55D978A8A1420E4 (coreteam@netfilter.org)
 #
 Name     : iptables
-Version  : 1.8.8
-Release  : 46
-URL      : https://www.netfilter.org/pub/iptables/iptables-1.8.8.tar.bz2
-Source0  : https://www.netfilter.org/pub/iptables/iptables-1.8.8.tar.bz2
+Version  : 1.8.9
+Release  : 47
+URL      : https://www.netfilter.org/pub/iptables/iptables-1.8.9.tar.xz
+Source0  : https://www.netfilter.org/pub/iptables/iptables-1.8.9.tar.xz
 Source1  : ip6tables-restore.service
 Source2  : ip6tables-save.service
 Source3  : iptables-restore.service
 Source4  : iptables-save.service
-Source5  : https://www.netfilter.org/pub/iptables/iptables-1.8.8.tar.bz2.sig
+Source5  : https://www.netfilter.org/pub/iptables/iptables-1.8.9.tar.xz.sig
 Summary  : Shared Xtables code for extensions and iproute2
 Group    : Development/Tools
 License  : GPL-2.0
@@ -144,11 +144,11 @@ services components for the iptables package.
 
 
 %prep
-%setup -q -n iptables-1.8.8
-cd %{_builddir}/iptables-1.8.8
+%setup -q -n iptables-1.8.9
+cd %{_builddir}/iptables-1.8.9
 %patch1 -p1
 pushd ..
-cp -a iptables-1.8.8 build32
+cp -a iptables-1.8.9 build32
 popd
 
 %build
@@ -156,7 +156,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1672757508
+export SOURCE_DATE_EPOCH=1676575719
 export GCC_IGNORE_WERROR=1
 export CFLAGS="$CFLAGS -Os -fdata-sections -fdebug-types-section -femit-struct-debug-baseonly -ffunction-sections -fno-lto -fno-semantic-interposition -fstack-protector-strong -fzero-call-used-regs=used -g1 -gno-column-info -gno-variable-location-views -gz "
 export FCFLAGS="$FFLAGS -Os -fdata-sections -fdebug-types-section -femit-struct-debug-baseonly -ffunction-sections -fno-lto -fno-semantic-interposition -fstack-protector-strong -fzero-call-used-regs=used -g1 -gno-column-info -gno-variable-location-views -gz "
@@ -177,7 +177,7 @@ export LDFLAGS="${LDFLAGS}${LDFLAGS:+ }-m32 -mstackrealign"
 make
 popd
 %install
-export SOURCE_DATE_EPOCH=1672757508
+export SOURCE_DATE_EPOCH=1676575719
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/iptables
 cp %{_builddir}/iptables-%{version}/COPYING %{buildroot}/usr/share/package-licenses/iptables/4cc77b90af91e615a64ae04893fdffa7939db84c || :
@@ -340,6 +340,7 @@ rm -f %{buildroot}*/usr/lib32/xtables/libxt_udp.so
 /usr/bin/ebtables-nft-save
 /usr/bin/ebtables-restore
 /usr/bin/ebtables-save
+/usr/bin/ebtables-translate
 /usr/bin/ip6tables
 /usr/bin/ip6tables-apply
 /usr/bin/ip6tables-legacy
@@ -372,6 +373,7 @@ rm -f %{buildroot}*/usr/lib32/xtables/libxt_udp.so
 
 %files data
 %defattr(-,root,root,-)
+/usr/share/xtables/iptables.xslt
 /usr/share/xtables/pf.os
 
 %files dev
@@ -415,7 +417,7 @@ rm -f %{buildroot}*/usr/lib32/xtables/libxt_udp.so
 %files lib
 %defattr(-,root,root,-)
 /usr/lib64/libxtables.so.12
-/usr/lib64/libxtables.so.12.6.0
+/usr/lib64/libxtables.so.12.7.0
 /usr/lib64/xtables/libarpt_mangle.so
 /usr/lib64/xtables/libebt_802_3.so
 /usr/lib64/xtables/libebt_among.so
@@ -435,11 +437,8 @@ rm -f %{buildroot}*/usr/lib32/xtables/libxt_udp.so
 /usr/lib64/xtables/libebt_vlan.so
 /usr/lib64/xtables/libip6t_DNPT.so
 /usr/lib64/xtables/libip6t_HL.so
-/usr/lib64/xtables/libip6t_LOG.so
-/usr/lib64/xtables/libip6t_MASQUERADE.so
 /usr/lib64/xtables/libip6t_NETMAP.so
 /usr/lib64/xtables/libip6t_REJECT.so
-/usr/lib64/xtables/libip6t_SNAT.so
 /usr/lib64/xtables/libip6t_SNPT.so
 /usr/lib64/xtables/libip6t_ah.so
 /usr/lib64/xtables/libip6t_dst.so
@@ -454,11 +453,8 @@ rm -f %{buildroot}*/usr/lib32/xtables/libxt_udp.so
 /usr/lib64/xtables/libip6t_srh.so
 /usr/lib64/xtables/libipt_CLUSTERIP.so
 /usr/lib64/xtables/libipt_ECN.so
-/usr/lib64/xtables/libipt_LOG.so
-/usr/lib64/xtables/libipt_MASQUERADE.so
 /usr/lib64/xtables/libipt_NETMAP.so
 /usr/lib64/xtables/libipt_REJECT.so
-/usr/lib64/xtables/libipt_SNAT.so
 /usr/lib64/xtables/libipt_TTL.so
 /usr/lib64/xtables/libipt_ULOG.so
 /usr/lib64/xtables/libipt_ah.so
@@ -476,7 +472,10 @@ rm -f %{buildroot}*/usr/lib32/xtables/libxt_udp.so
 /usr/lib64/xtables/libxt_HMARK.so
 /usr/lib64/xtables/libxt_IDLETIMER.so
 /usr/lib64/xtables/libxt_LED.so
+/usr/lib64/xtables/libxt_LOG.so
 /usr/lib64/xtables/libxt_MARK.so
+/usr/lib64/xtables/libxt_MASQUERADE.so
+/usr/lib64/xtables/libxt_NAT.so
 /usr/lib64/xtables/libxt_NFLOG.so
 /usr/lib64/xtables/libxt_NFQUEUE.so
 /usr/lib64/xtables/libxt_NOTRACK.so
@@ -484,6 +483,7 @@ rm -f %{buildroot}*/usr/lib32/xtables/libxt_udp.so
 /usr/lib64/xtables/libxt_REDIRECT.so
 /usr/lib64/xtables/libxt_SECMARK.so
 /usr/lib64/xtables/libxt_SET.so
+/usr/lib64/xtables/libxt_SNAT.so
 /usr/lib64/xtables/libxt_SYNPROXY.so
 /usr/lib64/xtables/libxt_TCPMSS.so
 /usr/lib64/xtables/libxt_TCPOPTSTRIP.so
@@ -548,7 +548,7 @@ rm -f %{buildroot}*/usr/lib32/xtables/libxt_udp.so
 /usr/lib32/libip6tc.so.2
 /usr/lib32/libip6tc.so.2.0.0
 /usr/lib32/libxtables.so.12
-/usr/lib32/libxtables.so.12.6.0
+/usr/lib32/libxtables.so.12.7.0
 /usr/lib32/xtables/libebt_among.so
 /usr/lib32/xtables/libebt_arp.so
 /usr/lib32/xtables/libebt_arpreply.so
@@ -560,6 +560,10 @@ rm -f %{buildroot}*/usr/lib32/xtables/libxt_udp.so
 /usr/lib32/xtables/libebt_stp.so
 /usr/lib32/xtables/libebt_vlan.so
 /usr/lib32/xtables/libip6t_srh.so
+/usr/lib32/xtables/libxt_LOG.so
+/usr/lib32/xtables/libxt_MASQUERADE.so
+/usr/lib32/xtables/libxt_NAT.so
+/usr/lib32/xtables/libxt_SNAT.so
 
 %files license
 %defattr(0644,root,root,0755)
@@ -572,6 +576,7 @@ rm -f %{buildroot}*/usr/lib32/xtables/libxt_udp.so
 /usr/share/man/man8/arptables-nft-save.8
 /usr/share/man/man8/arptables-nft.8
 /usr/share/man/man8/ebtables-nft.8
+/usr/share/man/man8/ebtables-translate.8
 /usr/share/man/man8/ip6tables-apply.8
 /usr/share/man/man8/ip6tables-restore-translate.8
 /usr/share/man/man8/ip6tables-restore.8

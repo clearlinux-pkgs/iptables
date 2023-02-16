@@ -3,12 +3,14 @@ libxtables.so.12:get_kernel_version
 libxtables.so.12:xl_xlate_set_family
 libxtables.so.12:xt_xlate_add
 libxtables.so.12:xt_xlate_add_comment
+libxtables.so.12:xt_xlate_add_nospc
 libxtables.so.12:xt_xlate_alloc
 libxtables.so.12:xt_xlate_free
 libxtables.so.12:xt_xlate_get
 libxtables.so.12:xt_xlate_get_comment
 libxtables.so.12:xt_xlate_get_family
 libxtables.so.12:xt_xlate_set_add
+libxtables.so.12:xt_xlate_set_add_nospc
 libxtables.so.12:xt_xlate_set_get
 libxtables.so.12:xtables_announce_chain
 libxtables.so.12:xtables_calloc

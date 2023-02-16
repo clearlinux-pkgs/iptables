@@ -1,13 +1,10 @@
+Configure miss: libxt_NAT.c:427:9: warning: format not a string literal and no format arguments [-Wformat-security]
+
+Configure miss: libxt_NAT.c:427:9: warning: format not a string literal and no format arguments [-Wformat-security]
+
 Configure miss: linux/proc_fs.h
 Configure miss: linux/proc_fs.h
 Configure miss: linux/proc_fs.h presence
 Configure miss: linux/proc_fs.h presence
 Configure miss: linux/proc_fs.h usability
 Configure miss: linux/proc_fs.h usability
-Configure miss: xshared.c:1310:17: warning: format not a string literal and no format arguments [-Wformat-security]
-
-Configure miss: xshared.c:1310:17: warning: format not a string literal and no format arguments [-Wformat-security]
-
-Configure miss: xshared.c:1310:17: warning: format not a string literal and no format arguments [-Wformat-security]
-
-Configure miss: xshared.c:1310:17: warning: format not a string literal and no format arguments [-Wformat-security]
